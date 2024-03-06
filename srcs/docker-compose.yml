@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+
+  mariadb:
+    build:
+      context: /home/chaguer/Desktop/inception/srcs/requirements/mariadb/.
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: hchaguer
+      MYSQL_PASSWORD: mypass
