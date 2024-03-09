@@ -12,3 +12,9 @@ services:
       MYSQL_DATABASE: mydb
       MYSQL_USER: hchaguer
       MYSQL_PASSWORD: mypass
+  nginx:
+    build:
+      context: /home/chaguer/Desktop/Inception/srcs/requirements/ngnix/.
+    ports:
+      - "8080:443"
+    

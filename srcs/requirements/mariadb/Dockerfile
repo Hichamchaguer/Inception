@@ -1,4 +1,4 @@
-FROM debian:12
+FROM debian:11
 
 EXPOSE 3306
 ENV MYSQL_USER=hchaguer
