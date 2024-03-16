@@ -1,10 +1,12 @@
-
+#! /bin/bash
 service mariadb start
-mariadb -e "CREATE DATABASE $(MYDB);"
-mariadb -e "CREATE USER $(hicham) IDENTIFY BY $(123456);"
-mariadb -e "GRANT ALL PRIVILEGES OM $(mydb) to $(hicham) IDENTIFIED BY $(123456);"
 
+mysql -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
+mysql -e "CREATE USER IF NOT EXISTS \`${MYSQL_USER}\`@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';"
+mysql -e "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO \`${MYSQL_USER}\`@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
+mysql -e "FLUSH PRIVILEGES;"
+# echo test
 
 service mariadb stop
 
-exec mysql_safe
+exec mariadbd

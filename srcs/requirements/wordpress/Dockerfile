@@ -24,13 +24,15 @@ RUN apt-get update \
 
 # RUN cd /var/www && tar -xvf wordpress-6.0-fr_FR.tar.gz && rm wordpress-6.0-fr_FR.tar.gz
 
+ENV MYSQL_USER=hchaguer
+ENV MYSQL_PASSWORD=pass
+ENV MYSQL_DATABASE=MYDB
 
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
 RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
 
-COPY conf/script.sh /bin/script.sh
 
 WORKDIR /var/www/html
 
@@ -40,6 +42,7 @@ RUN mkdir -p /run/php && \
     chmod 755 /run/php && \
     chown www-data:www-data /run/php
 
+COPY conf/script.sh /bin/script.sh
 RUN chmod +x /bin/script.sh
 
 CMD ["sh", "/bin/script.sh"]
