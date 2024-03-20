@@ -12,7 +12,6 @@
 
 FROM debian:11
 
-
 RUN apt-get update \
     && apt-get upgrade \
     && apt-get install -y wget\
@@ -43,6 +42,7 @@ RUN mkdir -p /run/php && \
     chown www-data:www-data /run/php
 
 COPY conf/script.sh /bin/script.sh
+
 RUN chmod +x /bin/script.sh
 
 CMD ["sh", "/bin/script.sh"]

@@ -17,4 +17,5 @@ RUN chmod 777 /var/www/html && chown -R www-data:www-data /var/www/html
 
 COPY  conf/nginx.conf /etc/nginx/conf.d/nginx.conf
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

@@ -6,12 +6,27 @@
 #    By: chaguer <chaguer@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/01 12:00:33 by chaguer           #+#    #+#              #
-#    Updated: 2024/03/16 21:35:42 by chaguer          ###   ########.fr        #
+#    Updated: 2024/03/20 01:46:10 by chaguer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 up:
-	sudo docker compose -f /home/chaguer/Desktop/Inception/srcs/docker-compose.yml up
+	docker compose -f srcs/docker-compose.yml up --build -d
 
 down:
-	sudo docker compose -f /home/chaguer/Desktop/Inception/srcs/docker-compose.yml down
+	docker compose -f srcs/docker-compose.yml down
+	
+mariadb:
+	docker image rm -f mariadb
+	docker build -t mariadb srcs/requirements/mariadb
+	docker run --rm --name mariadb -itd -p3306:3306 mariadb
+
+wordpress:
+	docker image rm -f wordpress
+	docker build -t wordpress srcs/requirements/wordpress
+	docker run --rm --name wordpress -itd --network inc -v data:/var/www/html -p9000:9000 wordpress
+
+nginx:
+	docker image rm -f nginx
+	docker build -t nginx srcs/requirements/nginx
+	docker run --rm --name nginx -itd --network inc -v data:/var/www/html -p443:433 nginx

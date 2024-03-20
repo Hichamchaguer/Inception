@@ -3,10 +3,16 @@ version: '3.8'
 services:
 
   mariadb:
+    container_name: mariadb
+    image: mariadb-image
     build:
-      context: requirements/mariadb/.
+      context: requirements/mariadb
     ports:
       - "3306:3306"
+    networks:
+      - inc
+    volumes:
+      - mariadb:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: MYDB
@@ -14,25 +20,55 @@ services:
       MYSQL_PASSWORD: pass
 
   wordpress:
+    container_name: wordpress
+    image: wordpress-image
     build:
       context: requirements/wordpress
     ports:
       - 9000:9000
     depends_on:
       - mariadb
-    # networks:
-    #   - inc
-    # volumes:
-    #   -data:/var/www/html
+    networks:
+      - inc
+    volumes:
+      - wordpress:/var/www/html
     environment:
       MYSQL_DATABASE: MYDB
       MYSQL_USER: hchaguer
       MYSQL_PASSWORD: pass
 
   nginx:
-    build: 
-      context: requirements/ngnix/.
+    container_name: nginx
+    image: nginx-image
+    build:
+      context: requirements/nginx/.
     ports:
       - 443:443
+    depends_on:
+      - wordpress
+    networks:
+      - inc
+    volumes:
+      - wordpress:/var/www/html
+    restart: always
+
+networks:
+  inc:
+    driver: bridge
+
+volumes:
+  wordpress:
+    driver: local
+    driver_opts :
+      o: bind
+      device: /home/chaguer/data/wordpress/
+      type: none
+
+  mariadb:
+    driver: local
+    driver_opts :
+      o: bind
+      device: /home/chaguer/data/mariadb/
+      type: none
     
     
