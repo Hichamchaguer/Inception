@@ -2,20 +2,24 @@ FROM debian:11
 
 EXPOSE 443
 
-RUN apt-get update \
-    && apt-get -y install nginx openssl \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update
 
+RUN apt-get -y install nginx
+
+RUN apt-get -y install openssl
+
+#path to store ssl certificate 
 RUN mkdir -p /etc/nginx/ssl
 
-RUN openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key \
-    -subj "/C=MA/ST=Ben Guerir/L=Morroco/O=42/OU=42/CN=hchaguer.42.fr/UID=hchaguer"
+RUN touch /etc/nginx/conf.d/nginx.conf
 
-RUN mkdir -p /var/run/nginx
+#install vim in the VM
+RUN apt update && apt install vim -y
 
 RUN chmod 777 /var/www/html && chown -R www-data:www-data /var/www/html
 
-COPY  conf/nginx.conf /etc/nginx/conf.d/nginx.conf
+COPY  ./conf/nginx.sh nginx.sh
 
-# CMD ["nginx", "-g", "daemon off;"]
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+RUN chmod +x nginx.sh
+ 
+ENTRYPOINT ["sh","nginx.sh"]
